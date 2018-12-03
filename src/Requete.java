@@ -1,4 +1,4 @@
-package requestSide;
+//package requestSide;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,6 +21,14 @@ public class Requete {
 	private boolean self = false;
 	private String associes;
 	private String MBID;
+
+	public static void main(String[] args) {
+		Requete re = new Requete("release", "racine carree", 1, false, true);
+		re.makeRequete();
+		System.out.println(re.getUrlToRead());
+		System.out.println(re.getJson());
+		System.out.println("OK");
+	}
 
 	public Requete(String entiteVoulu, String entree, int nbResultatsAttendus, boolean exact, boolean complet) {
 		super();
@@ -60,8 +68,8 @@ public class Requete {
 	public int getNbResultatsAttendus() {
 		return nbResultatsAttendus;
 	}
-//Permet de constituer l'url que nous allons rechercher
 
+	//Permet de constituer l'url que nous allons rechercher
 	public void makeRequete() {
 		this.urlToRead = "http://musicbrainz.org/ws/2/";
 		this.urlToRead = this.urlToRead + this.entiteVoulu;
@@ -88,7 +96,8 @@ public class Requete {
 			this.urlToRead = this.urlToRead.replaceAll(" ", "+");
 		}
 	}
-//Permet de recuperer le fichier Json lié a l'objet requete
+
+	//Permet de recuperer le fichier Json lié a l'objet requete
 
 	public String getJson() {
 		try {
@@ -109,18 +118,6 @@ public class Requete {
 			System.err.println("Fichier Json impossible a recuperer");
 			return "";
 		}
-
-	}
-
-	public static void main(String[] args) {
-		Requete re = new Requete("release", "racine carree", 1, false, true);
-		re.makeRequete();
-		System.out.println(re.getUrlToRead());
-		System.out.println(re.getJson());
-		
-		
-		
-		 
 
 	}
 
