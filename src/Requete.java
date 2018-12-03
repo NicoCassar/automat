@@ -27,7 +27,7 @@ public class Requete {
 		re.makeRequete();
 		System.out.println(re.getUrlToRead());
 		System.out.println(re.getJson());
-		System.out.println("OK");
+		System.out.println("OK"); 
 	}
 
 	public Requete(String entiteVoulu, String entree, int nbResultatsAttendus, boolean exact, boolean complet) {
