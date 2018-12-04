@@ -9,101 +9,23 @@ import java.net.URL;
 //le MBID a l'eventuel Id qui permettra de retrouver  les boolean exact et fini definissant si l'entree a une syntaxe exacte que la saisie est complete
 
 public class Requete {
-	private String entiteVoulu;
-	private String entree;
-	private int nbResultatsAttendus;
-	private boolean exact = false;
-	private boolean complet = false;
-	private int offset = 0;
+	private String gare;
 	private String urlToRead;
-	private boolean associciated = false;
-	private boolean self = false;
-	private String associes;
-	private String MBID;
 
-	public static void main(String[] args) {
-		Requete re = new Requete("release", "racine carree", 1, false, true);
-		re.makeRequete();
-		System.out.println(re.getUrlToRead());
-		System.out.println(re.getJson());
-		System.out.println("OK"); 
+	public Requete(String gare) {
+		this.gare = gare;
 	}
 
-	public Requete(String entiteVoulu, String entree, int nbResultatsAttendus, boolean exact, boolean complet) {
-		super();
-		this.entiteVoulu = entiteVoulu;
-		this.entree = entree;
-		this.nbResultatsAttendus = nbResultatsAttendus;
-		this.exact = exact;
-		this.complet = complet;
-
+	private void makeURL() {
+		this.urlToRead = "https://www.gares-sncf.com/fr/train-times/" + gare + "/departure";
 	}
-
-	public Requete(String entiteVoulu, int nbResultatsAttendus, int offset, String associes, String mBID) {
-		super();
-		this.entiteVoulu = entiteVoulu;
-		this.nbResultatsAttendus = nbResultatsAttendus;
-		this.offset = offset;
-		this.associciated = true;
-		this.associes = associes;
-		this.MBID = mBID;
-	}
-
-	public Requete(String MBID, String entiteVoulu) {
-		this.self = true;
-		this.MBID = MBID;
-		this.entiteVoulu = entiteVoulu;
-
-	}
-
-	public void setUrlToRead(String urlToRead) {
-		this.urlToRead = urlToRead;
-	}
-
-	public String getUrlToRead() {
-		return urlToRead;
-	}
-
-	public int getNbResultatsAttendus() {
-		return nbResultatsAttendus;
-	}
-
-	//Permet de constituer l'url que nous allons rechercher
-	public void makeRequete() {
-		this.urlToRead = "http://musicbrainz.org/ws/2/";
-		this.urlToRead = this.urlToRead + this.entiteVoulu;
-		if (this.self) {
-			this.urlToRead = this.urlToRead + "/" + this.MBID+"?fmt=json";
-
-		} else {
-			if (this.associciated) {
-
-				this.urlToRead = this.urlToRead + "/" + this.MBID + "?inc=" + this.associes;
-
-			} else {
-				this.urlToRead = this.urlToRead + "?query=" + this.entree;
-				if (!this.exact) {
-					this.urlToRead = this.urlToRead + "~";
-				} else if (!this.complet) {
-					this.urlToRead = this.urlToRead + "*";
-				}
-				if (this.offset != 0) {
-					this.urlToRead = this.urlToRead + "&offhis.set=" + offset;
-				}
-			}
-			this.urlToRead = this.urlToRead + "&limit=" + Integer.toString(this.nbResultatsAttendus) + "&fmt=json";
-			this.urlToRead = this.urlToRead.replaceAll(" ", "+");
-		}
-	}
-
-	//Permet de recuperer le fichier Json lié a l'objet requete
 
 	public String getJson() {
+		makeURL();
+		StringBuilder result = new StringBuilder();
+
 		try {
-			makeRequete();
-			String urlToRead = this.urlToRead;
-			StringBuilder result = new StringBuilder();
-			URL url = new URL(urlToRead);
+			URL url = new URL(this.urlToRead);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -115,7 +37,7 @@ public class Requete {
 			return result.toString();
 		} catch (Exception e) {
 			System.err.println("Fichier Json impossible a recuperer");
-			return "";
+			return "Error";
 		}
 
 	}
