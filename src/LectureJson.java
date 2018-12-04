@@ -19,9 +19,11 @@ public class LectureJson {
 			gare[i] = new Gare();
 			gare[i].setName(gareName[i]);
 			getObjects(gare[i]);
-			gare[i].filtreTGV();
 			
-			System.out.println("RESULT "+i);
+			gare[i].filtreTGV();
+			gare[i].filtreRetard30();
+			
+			System.out.println("RESULT : " + i);
 			System.out.println(gare[i].toString());
 		}
 	}
